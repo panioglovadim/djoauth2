@@ -1,9 +1,9 @@
 # coding: utf-8
 import random
-import urlparse
+import urllib.parse as urlparse
 from string import ascii_letters
 from string import digits
-from urllib import urlencode
+from urllib.parse import urlencode
 
 # The OAuth 2.0 Bearer specification (
 # http://tools.ietf.org/html/rfc6750#section-2.1 ) defines the
@@ -29,7 +29,7 @@ CLIENT_SECRET_CHARSET = ascii_letters + digits + '-._~'
 
 def random_string(length, charset):
   rand = random.SystemRandom()
-  return ''.join(rand.choice(charset) for i in xrange(length))
+  return ''.join(rand.choice(charset) for i in range(length))
 
 
 def make_bearer_token(length):
@@ -62,19 +62,12 @@ def update_parameters(url, parameters, encoding='utf8'):
   :rtype: a string URL.
   """
   # Convert  the base URL to the default encoding.
-  if isinstance(url, unicode):
-    url = url.encode(encoding)
-
   parsed_url = urlparse.urlparse(url)
   existing_query_parameters = urlparse.parse_qsl(parsed_url.query)
 
   # Convert unicode parameters to the default encoding.
   byte_parameters = []
   for key, value in (existing_query_parameters + parameters.items()):
-    if isinstance(key, unicode):
-      key = key.encode(encoding)
-    if isinstance(value, unicode):
-      value = value.encode(encoding)
     byte_parameters.append((key, value))
 
   # Generate the final URL with all of the updated parameters. Read
@@ -88,4 +81,3 @@ def update_parameters(url, parameters, encoding='utf8'):
       urlencode(byte_parameters),
       parsed_url.fragment
     ))
-

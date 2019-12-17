@@ -1,6 +1,5 @@
 # coding: utf-8
-from urllib import urlencode
-from urlparse import urlparse
+from urllib.parse import urlencode, urlparse
 
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
